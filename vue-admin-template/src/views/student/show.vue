@@ -2,7 +2,7 @@
 <div>
   <el-table
     :data="tableData"
-    height="250"
+    height=""
     border
     style="width: 100%">
       <el-table-column
@@ -38,69 +38,114 @@
         <el-button
           size="mini"
           type="danger"
-          @click="handleDelete(scope.row)">删除</el-button>
+          @click="handleDelete(scope.$index,scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
     <el-dialog title="编辑学生信息" :visible.sync="dialogFormVisible">
-      <el-form :model="tableData">
+      <el-form :model="form">
+        <el-input v-model="form.id" v-show="false"></el-input>
         <el-form-item label="姓名">
-          <el-input v-model="tableData.name" autocomplete="off"></el-input>
+          <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="班级">
-          <el-input v-model="tableData.classes" autocomplete="off"></el-input>
+          <el-input v-model="form.classes"></el-input>
         </el-form-item>
         <el-form-item label="电话">
-          <el-input v-model="tableData.phone" autocomplete="off"></el-input>
+          <el-input v-model="form.phone"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleUpdate()">确 定</el-button>
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleUpdateStudent()">确 定</el-button>
       </div>
   </el-dialog>
-
-
+  <el-pagination
+      :page-sizes="[5, 10, 15, 20]"
+      :page-size="10"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="400">
+  </el-pagination>
 
 </div>
 </template>
 
 <script>
-import { show } from "@/api/student.js";
+import { show,deleted,update } from "@/api/student.js";
   export default {
    data() {
       return {
         dialogFormVisible: false,
-        tableData: []
+        tableData: [],
+        form: {
+          id:'',
+          name: '',
+          classes: '',
+          phone: '',
+        },
+        index: "",
       }
     },
-    //生命周期函数（被创建时）
-    created: function(){
-      show().then((response)=>{
-        this.tableData = response.data.data;
-      })
+    //生命周期函数（渲染组件时）
+    mounted: function(){
+      this.loadData()
     },
     methods: {
+    loadData(){
+      show().then((response)=>{
+      this.tableData = response.data.data;
+      })
+    },
+    // 把当前的行对象row传入
     handleEdit(row) {
-      this.tableData.name = row.name
-      this.tableData.classes = row.classes
-      this.tableData.phone = row.phone
+      this.form.id = row.id
+      this.form.name = row.name
+      this.form.classes = row.classes
+      this.form.phone = row.phone
       this.dialogFormVisible = true;
       },
-    handleDelete(row) {
+    handleUpdate(){
+      update(this.form).then(
+        response => {
+        this.dialogFormVisible = false;
+        this.loadData()
+        this.$message({
+          message: '更新成功',
+          type: 'success'
+        })})
+      },
+    handleDelete(index,row) {
         //删除记录
-        var id = row.id;
-        this.$confirm('此操作将永久删除该条数据, 是否继续?', '警告', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-        })
+        var id = row.id
+        this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleted(id).then(
+            response => {
+              /*splice () 方法通过删除或替换现有元素或者原地添加新的元素来修改数组，并以数组形式返回被修改的内容。 */
+              this.tableData.splice(index,1);
+              this.$message({
+                  message: "成功删除",
+                  type: 'success'
+                });
+            }
+          )
+         }).catch(() => {
+           this.$message({
+             type: 'info',
+             message: '已取消删除'
+           });
+         });
       },
-    handleUpdateStudent(){
-      this.dialogFormVisible = false;
-      },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    }
   }
-
 }
 </script>
 

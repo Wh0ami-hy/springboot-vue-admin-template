@@ -1,10 +1,10 @@
 package com.example.spring_boot.entity;
 
 public class Student {
-    private String name = "我是名字";
-    private String phone = "456456";
-    private String id = "2";
-    private String classes = "459";
+    private String name;
+    private String phone;
+    private Integer id;
+    private String classes;
 
     public String getName() {
         return name;
@@ -14,7 +14,7 @@ public class Student {
         return phone;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -34,7 +34,7 @@ public class Student {
         this.phone = phone;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

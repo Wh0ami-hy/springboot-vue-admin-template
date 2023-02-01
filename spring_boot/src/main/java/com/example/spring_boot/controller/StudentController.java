@@ -2,9 +2,14 @@ package com.example.spring_boot.controller;
 
 
 import com.example.spring_boot.entity.Student;
+import com.example.spring_boot.entity.User;
+import com.example.spring_boot.mapper.StudentMapper;
 import com.example.spring_boot.utils.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.spring.web.json.Json;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,45 +17,32 @@ import java.util.List;
 @RestController
 @RequestMapping("/student")
 public class StudentController {
+
+    @Autowired
+    private StudentMapper studentMapper;
+
     @GetMapping("/show")
     public Result show() {
-        List<Student> students = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Student student = new Student();
-            student.setName("王" + i);
-            student.setId("" + i);
-            student.setPhone("8555" + i);
-            student.setClasses("46" + i);
-            students.add(student);
-        }
+
+        List<Student> students = studentMapper.show();
+        System.out.println(students);
         return Result.ok().data("data",students);
     }
+    @PostMapping("/deleted/{id}")
+    public Result deleted(@PathVariable Integer id) {
 
-    @PostMapping("/delete")
-    public List<Student> delete() {
-        List<Student> students = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            Student student = new Student();
-            student.setName("王" + i);
-            student.setId("" + i);
-            student.setPhone("8555" + i);
-            student.setClasses("46" + i);
-            students.add(student);
-        }
-        return students;
+        studentMapper.deleted(id);
+        return Result.ok();
     }
-    @PostMapping("/edit")
-    public List<Student> edit() {
-        List<Student> students = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            Student student = new Student();
-            student.setName("王" + i);
-            student.setId("" + i);
-            student.setPhone("8555" + i);
-            student.setClasses("46" + i);
-            students.add(student);
-        }
-        return students;
+    @PostMapping("/update")
+    public Result update(@RequestBody Student student){
+        studentMapper.update(student);
+        return Result.ok();
+    }
+    @PostMapping("/insert")
+    public Result insert(@RequestBody Student student) {
+        studentMapper.insert(student);
+        return Result.ok();
     }
 }
 

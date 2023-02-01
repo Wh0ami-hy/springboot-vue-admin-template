@@ -6,3 +6,27 @@ export function show() {
       method: 'get',
     })
   }
+
+export function deleted(id) {
+  return request({
+    url: '/student/deleted/' + id,
+    method: 'post',
+  })
+}
+
+export function update(data) {
+  return request({
+    url: '/student/update',
+    method: 'post',
+    data
+  })
+}
+
+export function insert(data) {
+  return request({
+    url: '/student/insert',
+    method: 'post',
+    data
+  })
+}
+

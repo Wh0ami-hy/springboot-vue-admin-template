@@ -54,20 +54,9 @@
 export default {
    data() {
       return {
-        content: '',
-        select: '',
+    
         dialogFormVisible: false,
-        tableData: [{
-          id: '1',
-          phone: '123132',
-          name: '王小虎',
-          classes: '459'
-        }, {
-          id: '2',
-          phone: '888888',
-          name: '王大虎',
-          classes: '460'
-        }]
+        tableData: [],
       }
     },
   methods: {
