@@ -3,8 +3,8 @@
     <el-input placeholder="请输入内容" v-model="content" class="input-with-select"
     style="margin-top: 15px;width:50%;margin-left: 15px;">
       <el-select v-model="select" slot="prepend" placeholder="请选择">
-        <el-option label="电话" value="1"></el-option>
-        <el-option label="姓名" value="2"></el-option>
+        <el-option label="电话" value="phone"></el-option>
+        <el-option label="姓名" value="name"></el-option>
       </el-select>
       <el-button slot="append" icon="el-icon-search" @click="handleSearch()"></el-button>
     </el-input>
@@ -51,12 +51,14 @@
 
 
 <script>
+import {selected} from "@/api/student.js";
+
 export default {
    data() {
       return {
-    
-        dialogFormVisible: false,
         tableData: [],
+        content: '',
+        select:'',
       }
     },
   methods: {
@@ -82,16 +84,16 @@ export default {
         });
         return;
       }
-      searchStudent(data).then(
+      selected(data).then(
         response=>{
           this.tableData = [];
-          if(response.data.length == 0){
+          if(response.data.data.length == 0){
             this.$message({
               message: "无匹配结果",
               type: 'warning'
             });
           }else{
-            this.tableData = response.data;
+            this.tableData = response.data.data;
           }
         }
       )

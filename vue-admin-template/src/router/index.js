@@ -77,14 +77,13 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/form',
+    path: '/user',
     component: Layout,
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        path: 'update',
+        component: () => import('@/views/user/update'),
+        meta: { title: '个人中心', icon: 'form' }
       }
     ]
   },

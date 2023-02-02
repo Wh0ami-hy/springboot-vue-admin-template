@@ -21,4 +21,12 @@ public interface StudentMapper {
 
     @Insert("insert into student values (#{id},#{name},#{classes},#{phone})")
     public Integer insert(Student student);
+
+    @Select("select * from student where name=#{name}")
+    public List<Student> selectByname(String name);
+
+    @Select("select * from student where phone=#{phone}")
+    public List<Student> selectByphone(String phone);
+
+
 }

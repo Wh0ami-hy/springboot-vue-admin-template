@@ -30,3 +30,10 @@ export function insert(data) {
   })
 }
 
+export function selected(data) {
+  return request({
+    url: '/student/selected',
+    method: 'post',
+    data
+  })
+}

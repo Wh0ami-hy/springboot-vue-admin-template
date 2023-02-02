@@ -1,6 +1,7 @@
 package com.example.spring_boot.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.spring_boot.entity.Student;
 import com.example.spring_boot.entity.User;
 import com.example.spring_boot.mapper.StudentMapper;
@@ -43,6 +44,20 @@ public class StudentController {
     public Result insert(@RequestBody Student student) {
         studentMapper.insert(student);
         return Result.ok();
+    }
+    @PostMapping("/selected")
+    public Result select(@RequestBody JSONObject param){
+        String content = param.getString("content");
+        String select = param.getString("select");
+        List<Student> students = null;
+        System.out.println(select + "-->" + content);
+
+        if (content.equals("phone")) {
+            students = studentMapper.selectByphone(content);
+        }else if (select.equals("name")){
+            students = studentMapper.selectByname(content);
+        }
+        return Result.ok().data("data",students);
     }
 }
 

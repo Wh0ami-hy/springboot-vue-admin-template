@@ -9,9 +9,9 @@ import java.util.List;
 
 @TableName("user")  //告诉MybatisPlus 要操作的表名（当类名和表名不一致时可用）
 public class User {
-    private String username = "admin";
-    private String password = "admin";
-    private String id = "1";
+    private String username;
+    private String password;
+    private Integer id;
 
     //描述用户所有订单
     @TableField(exist = false)
@@ -27,7 +27,7 @@ public class User {
         return password;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -40,7 +40,7 @@ public class User {
     }
 
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
