@@ -64,6 +64,7 @@ export default {
     onCancel() {
       this.form.username = ""
       this.form.password = ""
+      this.imageUrl = ""
     },
      handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);

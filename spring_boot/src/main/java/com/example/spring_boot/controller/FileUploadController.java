@@ -20,17 +20,22 @@ public class FileUploadController {
         //取文件类型
         System.out.println(photo.getContentType());
 
-        //获取web服务器运行路径
-        //String path = request.getServletContext().getRealPath("/upload/");
-        String path = "C:\\Users\\Hou_Yi\\Desktop\\springboot-vue-admin-template\\spring_boot\\src\\main\\resources\\static";
+        //获取当前工程路径
+        String path = System.getProperty("user.dir") + "/upload/";
         System.out.println(path);
         saveFile(photo,path);
         return Result.ok();
-
     }
     //保存上传文件至服务器
     public void saveFile(MultipartFile photo,String path) throws IOException{
-        File file = new File(path+ "\\"+ photo.getOriginalFilename());
+        File files = new File(path);
+        if (files.exists()){
+            System.out.println("文件夹已创建");
+        }else {
+            files.mkdirs();
+            System.out.println("文件夹创建成功");
+        }
+        File file = new File(path + photo.getOriginalFilename());
         photo.transferTo(file);
         System.out.println(file);
     }

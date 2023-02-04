@@ -1,7 +1,7 @@
 <template>
 <div>
   <el-table
-    :data="tableData"
+    :data="tableData.slice((pages.currentPage-1)*pages.size,pages.currentPage*pages.size)"
     height=""
     border
     style="width: 100%">
@@ -60,12 +60,16 @@
         <el-button @click="dialogFormVisible = false">取 消</el-button>
       </div>
   </el-dialog>
-  <el-pagination
-      :page-sizes="[5, 10, 15, 20]"
-      :page-size="10"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="400">
-  </el-pagination>
+  <div style="text-align: right">
+    <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-sizes="[5, 10, 15, 20]"
+        :page-size=pages.size
+        layout="total, sizes, prev, pager, next"
+        :total=pages.total>
+    </el-pagination>
+  </div>
 
 </div>
 </template>
@@ -77,6 +81,11 @@ import { show,deleted,update } from "@/api/student.js";
       return {
         dialogFormVisible: false,
         tableData: [],
+        pages:{
+          total: 0,
+          size: 5,
+          currentPage: 1,
+        },
         form: {
           id:'',
           name: '',
@@ -94,6 +103,7 @@ import { show,deleted,update } from "@/api/student.js";
     loadData(){
       show().then((response)=>{
       this.tableData = response.data.data;
+      this.pages.total = response.data.data.length
       })
     },
     // 把当前的行对象row传入
@@ -140,10 +150,10 @@ import { show,deleted,update } from "@/api/student.js";
          });
       },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.pages.size = val;
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.pages.currentPage = val;
     }
   }
 }
